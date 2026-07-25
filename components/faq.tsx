@@ -25,6 +25,18 @@ const faqs = [
     q: '¿Puedo tener varias sucursales?',
     a: 'Sí. Con los planes que incluyen multi-sucursal podés gestionar todas tus ubicaciones y profesionales desde un mismo panel.',
   },
+  {
+    q: '¿Tengo que registrar mi tarjeta de crédito?',
+    a: 'No. Podés empezar sin cargar ningún dato de pago. La prueba es gratis y sin tarjeta.',
+  },
+  {
+    q: '¿Qué pasa si lo pruebo y no me gusta?',
+    a: 'Sin problema. Podés darte de baja en cualquier momento, sin compromiso ni cargos ocultos. Si no es para vos, cerrás la cuenta y listo.',
+  },
+  {
+    q: '¿Qué pasa si algo no se adapta a la operatoria de mi negocio?',
+    a: 'Contanos cómo trabajás. Nuestro equipo de desarrollo se pone en contacto para adaptar Puntual a tu operatoria y hacerlo posible.',
+  },
 ]
 
 export function Faq() {

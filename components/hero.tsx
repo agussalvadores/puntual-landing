@@ -18,7 +18,7 @@ export function Hero() {
       <div className="pointer-events-none absolute -left-20 top-20 size-72 rounded-full bg-primary/30 blur-3xl" />
       <div className="pointer-events-none absolute -right-10 top-40 size-72 rounded-full bg-secondary/20 blur-3xl" />
 
-      <div className="relative mx-auto max-w-6xl px-4 pb-24 pt-16 sm:px-6 sm:pt-20">
+      <div className="relative mx-auto max-w-6xl px-4 pb-28 pt-16 sm:px-6 sm:pt-20">
         <motion.div
           className="mx-auto max-w-3xl text-center"
           variants={staggerContainer}
@@ -29,7 +29,8 @@ export function Hero() {
             variants={staggerItem}
             className="text-balance text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl"
           >
-            Tu agenda bajo control, tus turnos automatizados
+            Tu agenda bajo{" "}
+            <span className="text-accent">control</span>, tus turnos automatizados
           </motion.h1>
 
           <motion.p
@@ -61,32 +62,57 @@ export function Hero() {
 
         {/* Device composition */}
         <motion.div
-          className="relative mx-auto mt-16 max-w-4xl"
+          className="relative mx-auto mt-16 max-w-5xl"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          style={{ perspective: 1400 }}
         >
           {/* Desktop composition */}
-          <div className="relative hidden justify-center md:flex">
-            <div className="relative w-full max-w-2xl">
+          <div className="relative mx-auto hidden min-h-[420px] justify-center md:flex">
+            {/* Laptop — center / back */}
+            <div
+              className="relative z-10 w-full max-w-[640px] origin-bottom"
+              style={{
+                transform: 'rotateX(6deg) rotateY(-2deg)',
+                transformStyle: 'preserve-3d',
+              }}
+            >
               <CrmLaptop />
             </div>
 
-            <div className="absolute -bottom-8 left-0 -rotate-6 lg:-left-6">
+            {/* Phone booking — left / front */}
+            <div
+              className="absolute bottom-0 left-0 z-20 origin-bottom lg:-left-2 xl:left-4"
+              style={{
+                transform: 'rotateZ(-8deg) rotateY(12deg) translateZ(40px)',
+                transformStyle: 'preserve-3d',
+              }}
+            >
               <PhoneBooking />
             </div>
 
-            <div className="absolute -bottom-8 right-0 rotate-6 lg:-right-6">
+            {/* WhatsApp — right / front */}
+            <div
+              className="absolute bottom-0 right-0 z-20 origin-bottom lg:-right-2 xl:right-4"
+              style={{
+                transform: 'rotateZ(8deg) rotateY(-12deg) translateZ(40px)',
+                transformStyle: 'preserve-3d',
+              }}
+            >
               <WhatsappChat />
             </div>
           </div>
 
+          {/* Soft ground shadow */}
+          <div className="pointer-events-none absolute -bottom-6 left-1/2 hidden h-10 w-[70%] -translate-x-1/2 rounded-[100%] bg-black/40 blur-2xl md:block" />
+
           {/* Mobile composition: phone + whatsapp */}
-          <div className="flex items-end justify-center gap-3 md:hidden">
-            <div className="-rotate-3">
+          <div className="flex items-end justify-center gap-4 md:hidden">
+            <div style={{ transform: 'rotateZ(-4deg)' }}>
               <PhoneBooking />
             </div>
-            <div className="hidden rotate-3 min-[420px]:block">
+            <div className="hidden min-[420px]:block" style={{ transform: 'rotateZ(4deg)' }}>
               <WhatsappChat />
             </div>
           </div>

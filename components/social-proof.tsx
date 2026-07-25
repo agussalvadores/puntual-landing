@@ -1,34 +1,106 @@
 'use client'
 
-import { ScrollReveal, ScrollStagger, ScrollStaggerItem } from '@/components/scroll-reveal'
+import { useEffect, useRef, useState } from 'react'
+import { useInView } from 'framer-motion'
+import { ScrollReveal } from '@/components/scroll-reveal'
 
 const stats = [
-  { value: '+10.000', label: 'Turnos procesados con éxito' },
-  { value: '98%', label: 'Recordatorios entregados' },
-  { value: '-40%', label: 'Ausencias a turnos' },
-  { value: '4.9/5', label: 'Satisfacción de negocios' },
+  {
+    end: 100000,
+    prefix: '+',
+    suffix: '',
+    decimals: 0,
+    label: 'Turnos procesados con éxito',
+  },
+  {
+    end: 32,
+    prefix: '-',
+    suffix: '%',
+    decimals: 0,
+    label: 'Ausencias a turnos',
+  },
+  {
+    end: 4.9,
+    prefix: '',
+    suffix: '/5',
+    decimals: 1,
+    label: 'Satisfacción de negocios',
+  },
 ]
+
+function formatNumber(value: number, decimals: number) {
+  if (decimals > 0) {
+    return value.toFixed(decimals).replace('.', ',')
+  }
+  return Math.round(value).toLocaleString('es-AR')
+}
+
+function AnimatedStat({
+  end,
+  prefix,
+  suffix,
+  decimals,
+  label,
+  duration = 1800,
+}: {
+  end: number
+  prefix: string
+  suffix: string
+  decimals: number
+  label: string
+  duration?: number
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-40px' })
+  const [display, setDisplay] = useState(formatNumber(0, decimals))
+
+  useEffect(() => {
+    if (!inView) return
+
+    let frame = 0
+    const start = performance.now()
+
+    const tick = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1)
+      // easeOutCubic
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setDisplay(formatNumber(end * eased, decimals))
+      if (progress < 1) {
+        frame = requestAnimationFrame(tick)
+      }
+    }
+
+    frame = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(frame)
+  }, [inView, end, decimals, duration])
+
+  return (
+    <div ref={ref} className="text-center">
+      <div className="font-heading text-3xl font-extrabold text-primary sm:text-4xl">
+        {prefix}
+        {display}
+        {suffix}
+      </div>
+      <div className="mt-1 text-pretty text-sm text-muted-foreground">{label}</div>
+    </div>
+  )
+}
 
 export function SocialProof() {
   return (
-    <section className="border-b border-border bg-background">
+    <section className="bg-background">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
         <ScrollReveal>
           <p className="text-center text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-            Más de 10.000 turnos procesados con éxito
+            Más de 100.000 turnos procesados con éxito
           </p>
         </ScrollReveal>
 
-        <ScrollStagger className="mt-8 grid grid-cols-2 gap-6 md:grid-cols-4">
+        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
           {stats.map((s) => (
-            <ScrollStaggerItem key={s.label} className="text-center">
-              <div className="font-heading text-3xl font-extrabold text-primary sm:text-4xl">
-                {s.value}
-              </div>
-              <div className="mt-1 text-pretty text-sm text-muted-foreground">{s.label}</div>
-            </ScrollStaggerItem>
+            <AnimatedStat key={s.label} {...s} />
           ))}
-        </ScrollStagger>
+        </div>
       </div>
     </section>
   )

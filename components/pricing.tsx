@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, Gift } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { ScrollReveal, ScrollStagger, ScrollStaggerItem } from '@/components/scroll-reveal'
 
 const tiers = [
@@ -51,12 +51,8 @@ export function Pricing() {
     <section id="precios" className="bg-muted/40">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
         <ScrollReveal className="mx-auto max-w-2xl text-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent-foreground">
-            <Gift className="size-3.5 text-accent" />
-            Probala 1 mes gratis sin compromiso
-          </span>
-          <h2 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
-            Planes simples y transparentes
+          <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
+            Planes <span className="text-primary">simples</span> y transparentes
           </h2>
           <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
             Elegí el plan que acompañe el ritmo de tu negocio. Cambialo cuando quieras.

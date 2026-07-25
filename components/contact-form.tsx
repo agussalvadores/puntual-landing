@@ -39,14 +39,19 @@ export function ContactForm() {
       whatsapp: String(formData.get('whatsapp') ?? ''),
       vertical: String(formData.get('vertical') ?? verticales[0]),
       mensaje: String(formData.get('mensaje') ?? '') || undefined,
+      _gotcha: String(formData.get('_gotcha') ?? ''),
     }
 
     try {
       await submitContactForm(payload)
       setSent(true)
       form.reset()
-    } catch {
-      setError('Hubo un error al enviar. Probá de nuevo o escribinos por WhatsApp.')
+    } catch (err) {
+      setError(
+        err instanceof Error && err.message.includes('Demasiados')
+          ? err.message
+          : 'Hubo un error al enviar. Probá de nuevo o escribinos por WhatsApp.',
+      )
     } finally {
       setLoading(false)
     }
@@ -64,7 +69,7 @@ export function ContactForm() {
             <h2 className="mt-4 font-extrabold tracking-tight">Pedí una demo gratis</h2>
             <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
               Contanos sobre tu negocio y te mostramos cómo Puntual puede automatizar tu agenda en
-              minutos. Sin tarjeta, sin compromiso.
+              minutos. <span className="font-semibold text-accent">Sin tarjeta, sin compromiso.</span>
             </p>
             <ul className="mt-6 flex flex-col gap-3">
               {[
@@ -93,6 +98,16 @@ export function ContactForm() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                {/* Honeypot anti-spam: oculto para humanos, Formspree/bots lo ignoran si vacío */}
+                <input
+                  type="text"
+                  name="_gotcha"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="absolute -left-[9999px] h-0 w-0 opacity-0"
+                />
+
                 <div className="grid gap-4 sm:grid-cols-2">
                   {fields.map((f) => (
                     <div key={f.id} className="flex flex-col gap-1.5">

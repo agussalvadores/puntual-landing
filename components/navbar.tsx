@@ -39,9 +39,6 @@ export function Navbar() {
               {l.label}
             </a>
           ))}
-        </div>
-
-        <div className="hidden md:block">
           <a
             href="#contacto"
             className="inline-flex h-10 items-center rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground shadow-sm transition-transform hover:scale-[1.03]"

@@ -3,11 +3,10 @@
 import {
   Bell,
   CreditCard,
-  ListChecks,
+  Clock,
   Building2,
   Users,
   BarChart3,
-  Wrench,
 } from 'lucide-react'
 import { ScrollReveal, ScrollStagger, ScrollStaggerItem } from '@/components/scroll-reveal'
 
@@ -23,7 +22,7 @@ const features = [
     desc: 'Cobrá señas al reservar y pagos completos con Mercado Pago, de forma segura.',
   },
   {
-    icon: ListChecks,
+    icon: Clock,
     title: 'Lista de espera inteligente',
     desc: 'Cuando se libera un turno, avisamos automáticamente a quienes esperan.',
   },
@@ -42,11 +41,6 @@ const features = [
     title: 'Métricas de tu negocio',
     desc: 'Turnos, ausencias, ingresos y rendimiento de tu equipo en paneles claros.',
   },
-  {
-    icon: Wrench,
-    title: 'Adaptaciones a medida',
-    desc: 'Software a la medida de tu negocio si necesitás ajustes específicos.',
-  },
 ]
 
 export function Features() {
@@ -55,10 +49,12 @@ export function Features() {
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
         <ScrollReveal className="mx-auto max-w-2xl text-center">
           <h2 className="font-extrabold tracking-tight">
-            Una plataforma pensada para tu negocio
+            Una plataforma pensada para{" "}
+            <span className="text-primary">tu negocio</span>
           </h2>
           <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
-            Automatizá lo repetitivo y dedicá tu tiempo a lo que importa: tus clientes.
+            Automatizá lo repetitivo y dedicá tu tiempo a lo que importa:{" "}
+            <span className="font-semibold text-primary">tus clientes</span>.
           </p>
         </ScrollReveal>
 
