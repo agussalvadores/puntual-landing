@@ -19,7 +19,7 @@ const faqs = [
   },
   {
     q: '¿Manda recordatorios por WhatsApp?',
-    a: 'Sí. Enviamos confirmaciones y recordatorios automáticos por WhatsApp para reducir las ausencias sin que tengas que hacer nada.',
+    a: 'Sí. Enviamos confirmaciones y recordatorios automáticos por WhatsApp para reducir las ausencias sin que tengas que hacer nada. Somos Tech Provider oficial de Meta, con integración certificada a WhatsApp Business Platform.',
   },
   {
     q: '¿Puedo tener varias sucursales?',
