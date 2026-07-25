@@ -1,48 +1,7 @@
 'use client'
 
-import {
-  Scissors,
-  Stethoscope,
-  Dumbbell,
-  Sparkles,
-  HeartPulse,
-  Flower2,
-  Hand,
-  Sun,
-  PenTool,
-  PawPrint,
-  Brain,
-  Apple,
-  PersonStanding,
-  Camera,
-  Smile,
-  Eye,
-  Waves,
-  Palette,
-} from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+import { industries } from '@/lib/industries'
 import { ScrollReveal, ScrollStagger, ScrollStaggerItem } from '@/components/scroll-reveal'
-
-const industries: { icon: LucideIcon; label: string }[] = [
-  { icon: Scissors, label: 'Peluquerías & Estética' },
-  { icon: Sparkles, label: 'Barberías' },
-  { icon: Stethoscope, label: 'Consultorios Médicos' },
-  { icon: Smile, label: 'Odontología' },
-  { icon: Dumbbell, label: 'Gimnasios & Wellness' },
-  { icon: Flower2, label: 'Spa & Masajes' },
-  { icon: Hand, label: 'Manicura & Uñas' },
-  { icon: Sun, label: 'Depilación' },
-  { icon: PenTool, label: 'Tatuajes & Piercing' },
-  { icon: PawPrint, label: 'Veterinarias' },
-  { icon: Brain, label: 'Psicología & Coaching' },
-  { icon: Apple, label: 'Nutrición' },
-  { icon: HeartPulse, label: 'Fisioterapia' },
-  { icon: PersonStanding, label: 'Yoga & Pilates' },
-  { icon: Camera, label: 'Estudios de fotografía' },
-  { icon: Eye, label: 'Ópticas' },
-  { icon: Waves, label: 'Centros de natación' },
-  { icon: Palette, label: 'Maquillaje profesional' },
-]
 
 export function Industries() {
   return (

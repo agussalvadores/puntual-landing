@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { CircleCheckBig, MessageCircle, Loader2 } from 'lucide-react'
 import { submitContactForm, type ContactFormData } from '@/lib/contact-form'
+import { IndustrySelect } from '@/components/industry-select'
 import { ScrollStagger, ScrollStaggerItem } from '@/components/scroll-reveal'
 
 const fields = [
@@ -12,20 +13,19 @@ const fields = [
   { id: 'whatsapp', label: 'WhatsApp', type: 'tel', placeholder: '+54 9 ...' },
 ] as const
 
-const verticales = [
-  'Peluquería & Estética',
-  'Consultorio Médico',
-  'Gimnasio & Wellness',
-  'Otro',
-]
-
 export function ContactForm() {
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [vertical, setVertical] = useState('')
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    if (!vertical) {
+      setError('Seleccioná el rubro de tu negocio.')
+      return
+    }
+
     setLoading(true)
     setError(null)
 
@@ -37,7 +37,7 @@ export function ContactForm() {
       negocio: String(formData.get('negocio') ?? ''),
       email: String(formData.get('email') ?? ''),
       whatsapp: String(formData.get('whatsapp') ?? ''),
-      vertical: String(formData.get('vertical') ?? verticales[0]),
+      vertical,
       mensaje: String(formData.get('mensaje') ?? '') || undefined,
       _gotcha: String(formData.get('_gotcha') ?? ''),
     }
@@ -45,6 +45,7 @@ export function ContactForm() {
     try {
       await submitContactForm(payload)
       setSent(true)
+      setVertical('')
       form.reset()
     } catch (err) {
       setError(
@@ -127,18 +128,8 @@ export function ContactForm() {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="vertical" className="text-sm font-medium text-foreground">
-                    Rubro
-                  </label>
-                  <select
-                    id="vertical"
-                    name="vertical"
-                    className="h-11 rounded-xl border border-input bg-background px-3 text-sm outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
-                  >
-                    {verticales.map((v) => (
-                      <option key={v}>{v}</option>
-                    ))}
-                  </select>
+                  <span className="text-sm font-medium text-foreground">Rubro</span>
+                  <IndustrySelect value={vertical} onChange={setVertical} required />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
