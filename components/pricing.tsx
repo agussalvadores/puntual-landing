@@ -1,55 +1,191 @@
 'use client'
 
-import { Check } from 'lucide-react'
+import { useState } from 'react'
+import { Check, Info } from 'lucide-react'
 import { ScrollReveal, ScrollStagger, ScrollStaggerItem } from '@/components/scroll-reveal'
+
+const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '5492923537308'
+const LAUNCH_PROMO = '1er mes gratis + 6 meses al 50% off'
+const WHATSAPP_COST_INFO =
+  'Los recordatorios automáticos por WhatsApp tienen un costo adicional por mensaje.'
+
+function LaunchDiscountBadge({ highlighted = false }: { highlighted?: boolean }) {
+  return (
+    <span
+      className={`inline-flex w-fit items-center rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${
+        highlighted
+          ? 'bg-accent text-accent-foreground shadow-sm shadow-accent/30'
+          : 'bg-accent/15 text-accent ring-1 ring-inset ring-accent/35'
+      }`}
+    >
+      Descuento por lanzamiento
+    </span>
+  )
+}
+
+function whatsAppUrl(message: string) {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+}
+
+function formatPromoPrice(usd: number) {
+  return Number.isInteger(usd / 2) ? String(usd / 2) : (usd / 2).toFixed(2)
+}
+
+function WhatsAppIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+    </svg>
+  )
+}
 
 const tiers = [
   {
-    name: 'Emprendedor',
-    price: 'Consultar',
-    tagline: 'Para empezar a ordenar tu agenda',
+    name: 'Individual',
+    priceUsd: 8,
+    tagline: 'Para profesionales independientes',
     features: [
-      'Agenda online',
-      'Recordatorios por WhatsApp',
+      'Turnos ilimitados',
       '1 profesional',
-      'Sitio de reservas con tu marca',
+      '1 sucursal',
+      'Agenda online con reservas 24/7',
+      'Bloqueo de agenda y excepciones de horario',
+      'Gestión de clientes (CRM)',
+      'Perfil del profesional',
+      'Configuración de servicios y horarios',
+      'Cobro de servicios y señas con Mercado Pago',
+      { text: 'Recordatorios automáticos por WhatsApp', info: WHATSAPP_COST_INFO },
     ],
-    cta: 'Comenzar gratis',
-    highlighted: false,
+    cta: 'Comenzar prueba gratis',
+    whatsAppMessage:
+      'Hola! Me interesa el plan Individual de Puntual. ¿Me podés dar más info?',
   },
   {
-    name: 'Profesional',
-    price: 'Consultar',
-    tagline: 'Para negocios en crecimiento',
+    name: 'Equipo',
+    priceUsd: 30,
+    tagline: 'Para centros con equipo',
     features: [
-      'Todo lo de Emprendedor',
-      'Multi-profesional',
-      'Cobro de señas (Mercado Pago)',
-      'Lista de espera inteligente',
-      'Códigos de confirmación',
+      'Todo lo del plan Individual',
+      'Hasta 5 profesionales',
+      '1 sucursal',
+      'Acceso individual por profesional',
     ],
     cta: 'Comenzar prueba gratis',
     highlighted: true,
+    whatsAppMessage: 'Hola! Me interesa el plan Equipo de Puntual. ¿Me podés dar más info?',
   },
   {
-    name: 'Personalizado',
-    price: 'A medida',
+    name: 'Estudio',
+    priceUsd: 60,
+    tagline: 'Para estudios con varias sedes',
+    features: [
+      'Todo lo del plan Equipo',
+      'Hasta 15 profesionales',
+      'Hasta 2 sucursales',
+    ],
+    cta: 'Comenzar prueba gratis',
+    whatsAppMessage: 'Hola! Me interesa el plan Estudio de Puntual. ¿Me podés dar más info?',
+  },
+  {
+    name: 'Cadena',
+    priceUsd: null,
     tagline: 'Para cadenas y necesidades específicas',
     features: [
-      'Todo lo de Profesional',
-      'Multi-sucursal',
+      'Todo lo del plan Estudio',
+      'Profesionales y sucursales ilimitados',
       'Adaptaciones a medida',
       'Soporte prioritario',
     ],
     cta: 'Hablar con ventas',
-    highlighted: false,
+    whatsAppMessage:
+      'Hola! Tengo un negocio con varias sucursales y quiero conocer el plan Cadena de Puntual. ¿Podemos hablar?',
   },
 ]
 
+type FeatureItem = string | { text: string; info?: string }
+
+function FeatureCheck({
+  feature,
+  variant = 'default',
+}: {
+  feature: FeatureItem
+  variant?: 'default' | 'highlighted'
+}) {
+  const [infoOpen, setInfoOpen] = useState(false)
+  const text = typeof feature === 'string' ? feature : feature.text
+  const info = typeof feature === 'string' ? undefined : feature.info
+  const lastSpace = info ? text.lastIndexOf(' ') : -1
+  const leadText = lastSpace > 0 ? text.slice(0, lastSpace) : text
+  const tailText = lastSpace > 0 ? text.slice(lastSpace + 1) : null
+
+  const infoButtonClass =
+    variant === 'highlighted'
+      ? 'text-primary-foreground/80 hover:bg-white/15 hover:text-primary-foreground'
+      : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+
+  const tooltipClass =
+    variant === 'highlighted'
+      ? 'bg-white text-foreground'
+      : 'border border-border bg-card text-foreground'
+
+  return (
+    <li
+      className={`w-full flex items-start gap-2 text-[13px] leading-snug xl:text-sm${info ? ' relative z-10' : ''}`}
+    >
+      {info && infoOpen && (
+        <>
+          <button
+            type="button"
+            aria-label="Cerrar"
+            className="fixed inset-0 z-40 cursor-default"
+            onClick={() => setInfoOpen(false)}
+          />
+          <p
+            role="tooltip"
+            className={`absolute right-0 bottom-full left-0 z-50 mb-2 rounded-lg px-3 py-2.5 text-[11px] leading-relaxed text-pretty shadow-lg ${tooltipClass}`}
+          >
+            {info}
+          </p>
+        </>
+      )}
+      <span
+        className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full ${
+          variant === 'highlighted' ? 'bg-white/20' : 'bg-accent/15 text-accent'
+        }`}
+      >
+        <Check className="size-3" />
+      </span>
+      <span className={variant === 'highlighted' ? 'text-primary-foreground/90' : 'text-foreground'}>
+        {tailText ? (
+          <>
+            {leadText}{' '}
+            <span className="whitespace-nowrap">
+              {tailText}
+              <button
+                type="button"
+                aria-label="Más información sobre recordatorios por WhatsApp"
+                aria-expanded={infoOpen}
+                onClick={() => setInfoOpen((prev) => !prev)}
+                className={`ml-0.5 inline-flex size-4 shrink-0 items-center justify-center rounded-full align-[-2px] transition-colors ${infoButtonClass}`}
+              >
+                <Info className="size-3.5" strokeWidth={2.5} />
+              </button>
+            </span>
+          </>
+        ) : (
+          text
+        )}
+      </span>
+    </li>
+  )
+}
+
 export function Pricing() {
+  const freeWhatsAppUrl = whatsAppUrl('Hola! Quiero empezar a usar Puntual gratis!')
+
   return (
     <section id="precios" className="bg-muted/40">
-      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
         <ScrollReveal className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
             Planes <span className="text-primary">simples</span> y transparentes
@@ -59,11 +195,29 @@ export function Pricing() {
           </p>
         </ScrollReveal>
 
-        <ScrollStagger className="mt-14 grid items-start gap-6 lg:grid-cols-3">
+        <ScrollReveal className="mt-10">
+          <div className="flex flex-col items-start justify-between gap-5 rounded-2xl border border-primary/20 bg-primary/5 px-6 py-5 sm:flex-row sm:items-center sm:px-8">
+            <p className="text-pretty text-sm leading-relaxed text-foreground sm:text-base">
+              <span className="font-semibold">¿Estás arrancando?</span> Usa nuestro plan gratuito,
+              con hasta 50 turnos al mes, 1 profesional y 1 sucursal.
+            </p>
+            <a
+              href={freeWhatsAppUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-11 w-full shrink-0 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.03] sm:w-auto"
+            >
+              <WhatsAppIcon className="size-4" />
+              Crear cuenta gratis
+            </a>
+          </div>
+        </ScrollReveal>
+
+        <ScrollStagger className="mt-10 grid grid-cols-1 gap-4 lg:grid-cols-4 lg:items-stretch lg:gap-5">
           {tiers.map((tier) => (
-            <ScrollStaggerItem key={tier.name}>
+            <ScrollStaggerItem key={tier.name} className="h-full">
               <div
-                className={`relative flex h-full flex-col rounded-3xl border p-8 ${
+                className={`relative flex h-full flex-col overflow-visible rounded-3xl border p-5 lg:p-6 ${
                   tier.highlighted
                     ? 'border-primary bg-primary text-primary-foreground shadow-xl shadow-primary/20 lg:-translate-y-3'
                     : 'border-border bg-card text-card-foreground'
@@ -82,39 +236,83 @@ export function Pricing() {
                 >
                   {tier.tagline}
                 </p>
-                <div className="mt-5 font-heading text-3xl font-extrabold">{tier.price}</div>
 
-                <ul className="mt-6 flex flex-1 flex-col gap-3">
-                  {tier.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2.5 text-sm">
+                {tier.priceUsd !== null ? (
+                  <div className="mt-5 min-h-[5.5rem]">
+                    <LaunchDiscountBadge highlighted={tier.highlighted} />
+                    <div className="mt-2.5 flex flex-col gap-0.5">
                       <span
-                        className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full ${
-                          tier.highlighted ? 'bg-white/20' : 'bg-accent/15 text-accent'
+                        className={`text-base font-semibold line-through decoration-1 ${
+                          tier.highlighted
+                            ? 'text-primary-foreground/45'
+                            : 'text-muted-foreground'
                         }`}
                       >
-                        <Check className="size-3" />
+                        USD {tier.priceUsd}/mes
                       </span>
-                      <span
-                        className={
-                          tier.highlighted ? 'text-primary-foreground/90' : 'text-foreground'
-                        }
-                      >
-                        {f}
+                      <span className="font-heading text-2xl font-extrabold lg:text-[1.65rem] xl:text-3xl">
+                        USD {formatPromoPrice(tier.priceUsd)}
+                        <span
+                          className={`ml-0.5 text-sm font-semibold xl:text-base ${
+                            tier.highlighted
+                              ? 'text-primary-foreground/80'
+                              : 'text-muted-foreground'
+                          }`}
+                        >
+                          /mes
+                        </span>
                       </span>
-                    </li>
-                  ))}
-                </ul>
+                    </div>
+                    <p
+                      className={`mt-2 text-xs font-medium leading-snug ${
+                        tier.highlighted ? 'text-primary-foreground/90' : 'text-foreground'
+                      }`}
+                    >
+                      {LAUNCH_PROMO}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="mt-5 min-h-[5.5rem]">
+                    <p
+                      className={`text-sm font-medium leading-snug xl:text-base ${
+                        tier.highlighted ? 'text-primary-foreground/80' : 'text-muted-foreground'
+                      }`}
+                    >
+                      Precio a convenir según tu operación
+                    </p>
+                  </div>
+                )}
 
                 <a
-                  href="#contacto"
-                  className={`mt-8 inline-flex h-11 items-center justify-center rounded-full px-6 text-sm font-semibold transition-transform hover:scale-[1.03] ${
+                  href={whatsAppUrl(tier.whatsAppMessage)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`mt-5 inline-flex h-11 w-full shrink-0 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold transition-transform hover:scale-[1.03] ${
                     tier.highlighted
                       ? 'bg-accent text-accent-foreground'
                       : 'bg-primary text-primary-foreground'
                   }`}
                 >
+                  <WhatsAppIcon className="size-4" />
                   {tier.cta}
                 </a>
+
+                <ul
+                  className={`relative overflow-visible mt-5 flex flex-1 flex-col gap-2 border-t pt-5 xl:gap-2.5 ${
+                    tier.highlighted ? 'border-primary-foreground/20' : 'border-border'
+                  }`}
+                >
+                  {tier.features.map((feature) => {
+                    const key = typeof feature === 'string' ? feature : feature.text
+                    return (
+                      <FeatureCheck
+                        key={key}
+                        feature={feature}
+                        variant={tier.highlighted ? 'highlighted' : 'default'}
+                      />
+                    )
+                  })}
+                </ul>
               </div>
             </ScrollStaggerItem>
           ))}
