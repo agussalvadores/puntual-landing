@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { Menu, X } from 'lucide-react'
+import { WhatsAppIcon } from '@/components/whatsapp-icon'
+import { WHATSAPP_MESSAGES, whatsAppUrl } from '@/lib/whatsapp'
 
 const links = [
   { label: 'Features', href: '#features' },
@@ -12,6 +14,7 @@ const links = [
 
 export function Navbar() {
   const [open, setOpen] = useState(false)
+  const whatsAppHref = whatsAppUrl(WHATSAPP_MESSAGES.trial)
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-md">
@@ -40,9 +43,12 @@ export function Navbar() {
             </a>
           ))}
           <a
-            href="#contacto"
-            className="inline-flex h-10 items-center rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground shadow-sm transition-transform hover:scale-[1.03]"
+            href={whatsAppHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex h-10 items-center gap-2 rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground shadow-sm transition-transform hover:scale-[1.03]"
           >
+            <WhatsAppIcon className="size-4" />
             Comenzar Gratis
           </a>
         </div>
@@ -72,10 +78,13 @@ export function Navbar() {
               </a>
             ))}
             <a
-              href="#contacto"
+              href={whatsAppHref}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setOpen(false)}
-              className="mt-2 inline-flex h-11 items-center justify-center rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground"
+              className="mt-2 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground"
             >
+              <WhatsAppIcon className="size-4" />
               Comenzar Gratis
             </a>
           </div>
