@@ -7,6 +7,7 @@ export function whatsAppUrl(message: string) {
 export const WHATSAPP_MESSAGES = {
   free: 'Hola! Quiero empezar a usar Puntual gratis!',
   trial: 'Hola! Me interesa comenzar una prueba gratis de Puntual. ¿Me podés dar más info?',
+  support: 'Hola! Queria información acerca de Puntual...',
   individual: 'Hola! Me interesa el plan Individual de Puntual. ¿Me podés dar más info?',
   equipo: 'Hola! Me interesa el plan Equipo de Puntual. ¿Me podés dar más info?',
   estudio: 'Hola! Me interesa el plan Estudio de Puntual. ¿Me podés dar más info?',

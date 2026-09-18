@@ -7,6 +7,7 @@ import { Pricing } from '@/components/pricing'
 import { ContactForm } from '@/components/contact-form'
 import { Faq } from '@/components/faq'
 import { Footer } from '@/components/footer'
+import { WhatsAppFloat } from '@/components/whatsapp-float'
 
 export default function Page() {
   return (
@@ -22,6 +23,7 @@ export default function Page() {
         <Faq />
       </main>
       <Footer />
+      <WhatsAppFloat />
     </div>
   )
 }

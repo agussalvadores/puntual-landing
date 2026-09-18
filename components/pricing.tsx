@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Check, Info } from 'lucide-react'
 import { ScrollReveal, ScrollStagger, ScrollStaggerItem } from '@/components/scroll-reveal'
 import { WhatsAppIcon } from '@/components/whatsapp-icon'
+import { signupUrl } from '@/lib/signup'
 import { WHATSAPP_MESSAGES, whatsAppUrl } from '@/lib/whatsapp'
 
 const LAUNCH_PROMO = '1er mes gratis + 6 meses al 50% off'
@@ -46,7 +47,7 @@ const tiers = [
       { text: 'Recordatorios automáticos por WhatsApp', info: WHATSAPP_COST_INFO },
     ],
     cta: 'Comenzar prueba gratis',
-    whatsAppMessage: WHATSAPP_MESSAGES.individual,
+    ctaSignup: true,
   },
   {
     name: 'Equipo',
@@ -60,7 +61,7 @@ const tiers = [
     ],
     cta: 'Comenzar prueba gratis',
     highlighted: true,
-    whatsAppMessage: WHATSAPP_MESSAGES.equipo,
+    ctaSignup: true,
   },
   {
     name: 'Estudio',
@@ -72,7 +73,7 @@ const tiers = [
       'Hasta 2 sucursales',
     ],
     cta: 'Comenzar prueba gratis',
-    whatsAppMessage: WHATSAPP_MESSAGES.estudio,
+    ctaSignup: true,
   },
   {
     name: 'Cadena',
@@ -168,7 +169,7 @@ function FeatureCheck({
 }
 
 export function Pricing() {
-  const freeWhatsAppUrl = whatsAppUrl(WHATSAPP_MESSAGES.free)
+  const signupHref = signupUrl()
 
   return (
     <section id="precios" className="bg-muted/40">
@@ -189,12 +190,9 @@ export function Pricing() {
               con hasta 50 turnos al mes, 1 profesional y 1 sucursal.
             </p>
             <a
-              href={freeWhatsAppUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-11 w-full shrink-0 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.03] sm:w-auto"
+              href={signupHref}
+              className="inline-flex h-11 w-full shrink-0 items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.03] sm:w-auto"
             >
-              <WhatsAppIcon className="size-4" />
               Crear cuenta gratis
             </a>
           </div>
@@ -271,16 +269,21 @@ export function Pricing() {
                 )}
 
                 <a
-                  href={whatsAppUrl(tier.whatsAppMessage)}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={
+                    tier.ctaSignup
+                      ? signupHref
+                      : whatsAppUrl(tier.whatsAppMessage ?? WHATSAPP_MESSAGES.cadena)
+                  }
+                  {...(tier.ctaSignup
+                    ? {}
+                    : { target: '_blank', rel: 'noopener noreferrer' })}
                   className={`mt-5 inline-flex h-11 w-full shrink-0 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold transition-transform hover:scale-[1.03] ${
                     tier.highlighted
                       ? 'bg-accent text-accent-foreground'
                       : 'bg-primary text-primary-foreground'
                   }`}
                 >
-                  <WhatsAppIcon className="size-4" />
+                  {!tier.ctaSignup && <WhatsAppIcon className="size-4" />}
                   {tier.cta}
                 </a>
 

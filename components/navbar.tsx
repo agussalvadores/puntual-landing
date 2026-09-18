@@ -3,8 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { Menu, X } from 'lucide-react'
-import { WhatsAppIcon } from '@/components/whatsapp-icon'
-import { WHATSAPP_MESSAGES, whatsAppUrl } from '@/lib/whatsapp'
+import { loginUrl, signupUrl } from '@/lib/signup'
 
 const links = [
   { label: 'Features', href: '#features' },
@@ -14,7 +13,8 @@ const links = [
 
 export function Navbar() {
   const [open, setOpen] = useState(false)
-  const whatsAppHref = whatsAppUrl(WHATSAPP_MESSAGES.trial)
+  const signupHref = signupUrl()
+  const loginHref = loginUrl()
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-md">
@@ -42,15 +42,20 @@ export function Navbar() {
               {l.label}
             </a>
           ))}
-          <a
-            href={whatsAppHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-10 items-center gap-2 rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground shadow-sm transition-transform hover:scale-[1.03]"
-          >
-            <WhatsAppIcon className="size-4" />
-            Comenzar Gratis
-          </a>
+          <div className="flex items-center gap-3">
+            <a
+              href={signupHref}
+              className="inline-flex h-10 items-center rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground shadow-sm transition-transform hover:scale-[1.03]"
+            >
+              Comenzar Gratis
+            </a>
+            <a
+              href={loginHref}
+              className="inline-flex h-10 items-center rounded-full border border-border bg-background px-5 text-sm font-semibold text-foreground transition-colors hover:bg-muted"
+            >
+              Iniciar sesión
+            </a>
+          </div>
         </div>
 
         <button
@@ -78,14 +83,18 @@ export function Navbar() {
               </a>
             ))}
             <a
-              href={whatsAppHref}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={signupHref}
               onClick={() => setOpen(false)}
-              className="mt-2 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground"
+              className="mt-2 inline-flex h-11 items-center justify-center rounded-full bg-accent px-5 text-sm font-semibold text-accent-foreground"
             >
-              <WhatsAppIcon className="size-4" />
               Comenzar Gratis
+            </a>
+            <a
+              href={loginHref}
+              onClick={() => setOpen(false)}
+              className="inline-flex h-11 items-center justify-center rounded-full border border-border px-5 text-sm font-semibold text-foreground"
+            >
+              Iniciar sesión
             </a>
           </div>
         </div>

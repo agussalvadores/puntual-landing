@@ -5,9 +5,8 @@ import { motion } from 'framer-motion'
 import { CrmLaptop } from '@/components/mockups/crm-laptop'
 import { PhoneBooking } from '@/components/mockups/phone-booking'
 import { WhatsappChat } from '@/components/mockups/whatsapp-chat'
-import { WhatsAppIcon } from '@/components/whatsapp-icon'
 import { staggerContainer, staggerItem } from '@/components/scroll-reveal'
-import { WHATSAPP_MESSAGES, whatsAppUrl } from '@/lib/whatsapp'
+import { signupUrl } from '@/lib/signup'
 
 export function Hero() {
   return (
@@ -48,12 +47,9 @@ export function Hero() {
             className="mt-8 flex flex-col items-center justify-center"
           >
             <a
-              href={whatsAppUrl(WHATSAPP_MESSAGES.trial)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-accent px-6 text-sm font-semibold text-accent-foreground shadow-lg shadow-accent/20 transition-transform hover:scale-[1.03] sm:w-auto"
+              href={signupUrl()}
+              className="inline-flex h-12 w-full items-center justify-center rounded-full bg-accent px-6 text-sm font-semibold text-accent-foreground shadow-lg shadow-accent/20 transition-transform hover:scale-[1.03] sm:w-auto"
             >
-              <WhatsAppIcon className="size-4" />
               Comenzar Prueba Gratis
             </a>
 
